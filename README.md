@@ -46,20 +46,25 @@ Note the use of *varchars*, because not all company MDS feeds have reliable/comp
 When inserting from MDS into *DocklessOpenData*, use the following SQL as a guide:
 
 ```
-TripID = insert(insert(insert(insert(md5(sha2(source.OriginalTripID, '256')),9,1,'-'),14,1,'-'),19,1,'-'),24,1,'-') -- creates a new trip id from the orginal
+TripID = insert(insert(insert(insert(md5(sha2(source.OriginalTripID, '256')),9,1,'-'),14,1,'-'),19,1,'-'),24,1,'-') 
+-- creates a new trip id from the orginal
 
 StartDate = STR_TO_DATE(source.OriginalStartDateTime, '%Y-%m-%d')
 
 EndDate = STR_TO_DATE(source.OriginalEndDateTime,   '%Y-%m-%d')
 
-StartTime = LEFT(SEC_TO_TIME(FLOOR((TIME_TO_SEC(source.OriginalStartDateTime) + 450) / 900) * 900), 5) -- bins to 15 minute increments
+StartTime = LEFT(SEC_TO_TIME(FLOOR((TIME_TO_SEC(source.OriginalStartDateTime) + 450) / 900) * 900), 5) 
+-- bins to 15 minute increments
 
-EndTime = LEFT(SEC_TO_TIME(FLOOR((TIME_TO_SEC(source.OriginalEndDateTime)   + 450) / 900) * 900), 5) -- bins to 15 minute increments
+EndTime = LEFT(SEC_TO_TIME(FLOOR((TIME_TO_SEC(source.OriginalEndDateTime)   + 450) / 900) * 900), 5) 
+-- bins to 15 minute increments
 
 TripDuration = Round( ( UNIX_TIMESTAMP(source.OriginalEndDateTime) - UNIX_TIMESTAMP(source.OriginalStartDateTime) ) /60 )
 ```
 
-### 3 Run scripts to convert to open data
+### 3 Run scripts to convert to clean open data
+
+This removes distance outliers and populates day of week and hour of day fields.
 
 ```
 Update
