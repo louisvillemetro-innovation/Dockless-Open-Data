@@ -49,9 +49,12 @@ When inserting from MDS into *DocklessOpenData*, use the following SQL as a guid
 
 ```
 TripID = insert(insert(insert(insert(md5(sha2(source.OriginalTripID, '256')),9,1,'-'),14,1,'-'),19,1,'-'),24,1,'-') 
--- creates a new trip UUID from the orginal. This is a one-way function based on the source Trip UUID.  There may be a better way to do this, but we wanted to not just generate a new random UUID and instead wanted it to be reproducable based on source data.
+-- creates a new trip UUID from the orginal. This is a one-way function based on the source Trip UUID.  
+-- There may be a better way to do this, but we wanted to not just generate a new random UUID 
+-- and instead wanted it to be reproducable based on source data.
 
--- round start and end locations to 3 decimal places: about 2 city blocks, depending on your location on earth and city size
+-- round start and end locations to 3 decimal places: about 2 city blocks, 
+-- depending on your location on earth and city size
 StartLatitude = ROUND(source.OriginalStartLatitude, 3)
 StartLongitude = ROUND(source.OriginalStartLongitude, 3)
 EndLatitude = ROUND(source.OriginalEndLatitude, 3)
