@@ -43,6 +43,8 @@ CREATE TABLE `DocklessOpenData` (
 
 Note the use of *varchars*, because not all company MDS feeds have reliable/complete data.  
 
+**Note no trip line/polyline data is being stored.**
+
 When inserting from MDS into *DocklessOpenData*, use the following SQL as a guide:
 
 ```
