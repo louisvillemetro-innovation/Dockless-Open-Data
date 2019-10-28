@@ -14,11 +14,11 @@ These are the steps to processing from MDS to open data.
 
 ### 1 Obtain secure access to an MDS feed
 
-Using your city's [Dockless Vehicle Policy]() data sharing and enforcement requirements, obtain authentication which each operator's MDS feed for your city.
+Using your city's [Dockless Vehicle Policy](https://data.louisvilleky.gov/dataset/dockless-vehicles/resource/541f050d-b868-428e-9601-c48a04eba17c) data sharing and enforcement requirements, obtain authentication which each operator's MDS feed for your city.
 
 ### 2 Ingest a subset of MDS data into a database table
 
-Ingestion method is left as an exercise for the reader.  Code could be added here at a later date.
+Ingestion method from MDS is left as an exercise for the reader.  Code for this should be added here at a later date.
 
 This is the table structure for the *DocklessOpenData* open data table:
 
@@ -47,7 +47,13 @@ When inserting from MDS into *DocklessOpenData*, use the following SQL as a guid
 
 ```
 TripID = insert(insert(insert(insert(md5(sha2(source.OriginalTripID, '256')),9,1,'-'),14,1,'-'),19,1,'-'),24,1,'-') 
--- creates a new trip id from the orginal
+-- creates a new trip UUID from the orginal. This is a one-way function based on the source Trip UUID.  There may be a better way to do this, but we wanted to not just generate a new random UUID and instead wanted it to be reproducable based on source data.
+
+-- round start and end locations to 3 decimal places: about 2 city blocks, depending on your location on earth and city size
+StartLatitude = ROUND(source.OriginalStartLatitude, 3)
+StartLongitude = ROUND(source.OriginalStartLongitude, 3)
+EndLatitude = ROUND(source.OriginalEndLatitude, 3)
+EndLongitude = ROUND(source.OriginalEndLongitude, 3)
 
 StartDate = STR_TO_DATE(source.OriginalStartDateTime, '%Y-%m-%d')
 
@@ -60,9 +66,10 @@ EndTime = LEFT(SEC_TO_TIME(FLOOR((TIME_TO_SEC(source.OriginalEndDateTime)   + 45
 -- bins to 15 minute increments
 
 TripDuration = Round( ( UNIX_TIMESTAMP(source.OriginalEndDateTime) - UNIX_TIMESTAMP(source.OriginalStartDateTime) ) /60 )
+-- rounded to nearest minute
 ```
 
-### 3 Run scripts to convert to clean open data
+### 3 Run scripts to convert and clean open data
 
 This removes distance outliers and populates day of week and hour of day fields.
 
@@ -86,8 +93,8 @@ Export and post in CSV format the fields from the open data table.
 - **EndDate** - in YYYY-MM-DD format
 - **EndTime** - rounded to the nearest 15 minutes in HH:MM format
 - **TripDuration** - duration of the trip minutes
-- **TripDistance** - distance of trip in miles based on company route data
-- **StartLatitude** - rounded to nearest 3 decimal places
+- **TripDistance** - distance of trip in miles - company provided data
+- **StartLatitude** - rounded to nearest 3 decimal places (about 
 - **StartLongitude** - rounded to nearest 3 decimal places
 - **EndLatitude** - rounded to nearest 3 decimal places
 - **EndLongitude** - rounded to nearest 3 decimal places
