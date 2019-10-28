@@ -43,7 +43,7 @@ CREATE TABLE `DocklessOpenData` (
 
 Note the use of *varchars*, because not all company MDS feeds have reliable/complete data.  
 
-**Note no trip line/polyline data is being stored.**
+**Note no trip line/polyline data is being stored, and no provider information**
 
 When inserting from MDS into *DocklessOpenData*, use the following SQL as a guide:
 
@@ -102,6 +102,8 @@ Export and post in CSV format the fields from the open data table.
 - **EndLongitude** - rounded to nearest 3 decimal places
 - **DayOfWeek** - 1-7 based on date, 1 = Sunday through 7 = Saturday, useful for analysis
 - **HourNum** - the hour part of the time from 0-24 of the StartTime, useful for analysis
+
+See a sample CSV file of this data in this repo: [DocklessOpenData-Sample-Aug2019-Louisville.csv](https://github.com/louisvillemetro-innovation/dockless-open-data/blob/master/DocklessOpenData-Sample-Aug2019-Louisville.csv)
 
 ## Cities with Dockless Trip Open Data
 
