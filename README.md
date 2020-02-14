@@ -1,11 +1,11 @@
 # Dockless Open Data
 
-This guide will help you convert [MDS](https://github.com/CityOfLosAngeles/mobility-data-specification) trip data to anonymized open data, useful for city governments.
+This guide will help you convert [MDS](https://github.com/OpenMobilityFoundation/mobility-data-specification) trip data to anonymized open data, useful for city governments.
 
 ## Points to Consider
 
 - Cities need to be transparent with the kinds of data cities and private companies collect on residents.
-- Data sharing is required by local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
+- Data sharing is required by open records laws, local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
 
 ## Data Processing
@@ -51,13 +51,13 @@ CREATE TABLE `DocklessOpenData` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 ```
 
-Note the use of *varchars*, because not all company MDS feeds have reliable/complete data.  
+Note the use of *varchars*, because not all company MDS feeds have reliable/complete data in the right format.  
 
 The last 5 columns are used just for anonymizing the data later, in step 4 below.
 
 **Note no trip line/polyline data is being stored, and no provider information**
 
-When inserting from MDS into *DocklessOpenData*, use the following SQL as a guide:
+When inserting from MDS into *DocklessOpenData*, use the following SQL for formatting values:
 
 ```
 TripID = insert(insert(insert(insert(md5(sha2(source.OriginalTripID, '256')),9,1,'-'),14,1,'-'),19,1,'-'),24,1,'-') 
@@ -102,13 +102,13 @@ Set
 
 ### 4 Anonymize start and end points with few trips
 
-If there are not many trips between a starting location after binning to 3 decimal places in step 2, then we anonymize further to protect privacy of individual riders.  This common practice is called "k-anonymity".
+If there are not many trips between a starting location even after binning to 3 decimal places in step 2, then we anonymize further to protect privacy of individual riders.  This common practice is called "k-anonymity".
 
-In our case, we look for O/D pairs of less than 5.  That is, where there are less than 5 trips made between any combination of 2 aggregated start and end trip areas across the city.  If there are, then we randomly move those points in a larger radius from the original location.  The radius here is about 0.3km in a random direction.  
+In our case, we look for O/D pairs of less than 5.  That is, where there are less than 5 trips made between any combination of 2 aggregated start and end trip areas across the city.  If there are, then we randomly move those points in a larger radius from the original location.  The radius here is about 0.3km in a random direction, which is a generalization method. 
 
 In the final data there is no way to know which trips have been anonymized in this way, and which trips are only aggreggated to the block level without further anonymization.
 
-To do this with only SQL, we use the column called 'Fuzzed' which tracks what O/D pairs need to be fuzzed, and which ones are then fuzzed with a stored procedure.  There are also 4 columns for lat/lon start/end coordinates, that are the original values before fuzzing. 
+To do this with only SQL, we use the column called 'Fuzzed' which tracks what O/D pairs need to be fuzzed, and which ones have then been fuzzed with a stored procedure.  There are also 4 columns for lat/lon start/end coordinates, that are the original values before fuzzing. 
 
 
 ```
