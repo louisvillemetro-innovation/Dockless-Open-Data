@@ -11,7 +11,7 @@ We welcome feedback on this method of publishing.  We want to preserve rider pri
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
 - The trip data in its raw form is considered PII since it anonymously tracks use of transporation devices in space and time, which is why we process the data before releasing.  Similar processing is done with crime reports and other open data.
 
-## Example Data Outcomes
+## Example Geographic Data Outcomes
 
 Starting with the raw location data (red) we will use binning and k-anonminity to fuzz the locations, while still providing useful, granular data (green) to comply with local, state, and federal open records laws.
 
@@ -37,13 +37,13 @@ Next we run those binned locations through a k-anonymity generalization function
 
 ![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown.jpg)
 
-Note how the points here are more spread out and than binning alone.
+Note how the points here are more spread out than with the step 2 binning alone.
 
 ### 4) End Result
 
-In the end we have a grid of points, and the person looking at the data cannot trace a location back to its source.  Also, there is no way to tell if a point has been both fuzzed and binned, or just binned.  
+In the end we have a grid of points, and the person looking at the data cannot trace a location back to its original location.  Also, there is no way to tell if a point has been both fuzzed and binned, or just binned.  
 
-Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analytics projects.
+Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analysis.
 
 -image here-
 
@@ -143,7 +143,7 @@ Set
 
 If there are not many trips between a starting location even after binning to 3 decimal places in step 2, then we anonymize further to protect privacy of individual riders.  This common practice is called "k-anonymity".
 
-In our case, we look for O/D pairs of less than 5.  That is, where there are less than 5 trips made between any combination of 2 aggregated start and end trip areas across the city.  If there are, then we randomly move those points in a larger radius from the original location.  The radius here is about 0.3km in a random direction, which is a generalization method. 
+In our case, we look for O/D pairs of less than 5.  That is, where there are less than 5 trips made between any combination of 2 aggregated start and end trip areas across the city.  If there are, then we randomly move those points in a larger radius from the original location.  The radius here is about 400 meters in a random direction, which is a k-anonymity generalization method. 
 
 In the final data there is no way to know which trips have been anonymized in this way, and which trips are only aggreggated to the block level without further anonymization.
 
@@ -215,6 +215,8 @@ DELIMITER ;
 
 ```
 
+*Note the .004 and .005 multipliers are to adjust the radius for the height and width difference at the latitude and longitude at the Louisville, KY latitude.  You may want to adjust these for your location.*
+
 Once this procedure is created, you can just run the procedure with this SQL.
 
 
@@ -246,10 +248,14 @@ See a sample CSV file of this data in this repo: [DocklessOpenData-Sample-Aug201
 ## Cities with Dockless Trip Open Data
 
 1. [Louisville, KY](https://data.louisvilleky.gov/dataset/dockless-vehicles) (3 decimal places lat/lon, 15 min time increments, outliers cleaned, k-anonymity of <5 O/D pairs fuzzed more)
+1. [Kansas City, MO](https://data.kcmo.org/Transportation/Microtransit-Scooter-and-Ebike-Trips/dy5n-ewk5) Uses this method except for k-anonymity step (3 decimal places lat/lon, 15 min time increments, outliers cleaned)
 1. [Austin, TX](https://data.austintexas.gov/Transportation-and-Mobility/Shared-Micromobility-Vehicle-Trips/7d8e-dm7r) (aligned to census tracts, outliers cleaned)
 1. [Minneapolis, MN](http://opendata.minneapolismn.gov/datasets/motorized-foot-scooter-trips-2018) (aligned to line segments, outliers cleaned)
+
 
 ## References
 
 - [Harvard's Civic Analytics Network](https://datasmart.ash.harvard.edu/news/article/civic-analytics-network-dockless-mobility-open-letter)
 - [NACTO's guidance](https://nacto.org/wp-content/uploads/2018/07/NACTO-Shared-Active-Transportation-Guidelines.pdf)
+
+*Note image colors have been check to be accessible to color blind individuals.  Please let us know if you experience any difficulties.*
