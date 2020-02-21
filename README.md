@@ -1,12 +1,49 @@
 # Dockless Open Data
 
-This guide will help you convert [MDS](https://github.com/OpenMobilityFoundation/mobility-data-specification) trip data to anonymized open data, useful for city governments.
+This guide will show how and why cities can convert [MDS](https://github.com/OpenMobilityFoundation/mobility-data-specification) trip data to anonymized open data, while respecting rider privacy.  This method is being used in [Louisville's public dockless open trip data](https://data.louisvilleky.gov/dataset/dockless-vehicles).
 
 ## Points to Consider
 
-- Cities need to be transparent with the kinds of data cities and private companies collect on residents.
+We welcome feedback on this method of publishing, and want to preserve rider privacy while being transparent with our methods and data collected.
+
+- Cities need to be transparent with the kinds of data cities and private companies collect on residents, and publishing a subset of this data helps with this communication.
 - Data sharing is required by open records laws, local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
+- The trip data in its raw form is considered PII since it anonymously tracks use of transporation devices in space and time, which is why we process the data before releasing.
+
+## Example Data Outcomes
+
+Starting with the raw location data (red) we will use binning and k-anonminity to fuzz the locations, while still providing useful, granular data (green) to comply with local, state, and federal open records laws.
+
+![Raw to Final](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-city.jpg)
+
+This image shows 100,000 dockless vehicle trip starting points (in red) from one provider selected randomly from raw Louisville data, and zoomed into downtown for detail.  After we bin the location to about ---, we then use a k-anonymity generalization method to arrive at the final open data (point grid in green). 
+
+### 1) Staring Data - Raw GPS Points
+
+The raw start/end data comes to us through MDS as GPS points.  Note some have inherent GPS error already, as can be seen by points in the Ohio River to the north.  We use this data internally for policy compliance, planning, complaint resolution, parking compliance, and equitable distrubution checks.
+
+![Start](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-downtown.jpg)
+
+### 2) Binning
+
+The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. 
+
+![Binning](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/bin-downtown)
+
+### 3) Fuzzing More
+
+Next we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location, then we move both the start and end points further, in a random 800 meters radius in any direction.  In the Louisville data, this is about one third of all the trips.
+
+![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown)
+
+### 4) End Result
+
+In the end we have a grid of points, and the person looking at the data cannot trace a location back to its source.  There is no way to tell if a point has been fuzzed and binned, or just binned.  
+
+Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still maintained.
+
+-image here-
 
 ## Data Processing
 
