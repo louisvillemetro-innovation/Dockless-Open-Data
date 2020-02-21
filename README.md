@@ -23,19 +23,19 @@ This image shows 100,000 dockless vehicle trip starting points (in red) from one
 
 The raw start/end data comes to us through MDS as GPS points.  Note some have inherent GPS error already, as can be seen by points in the Ohio River to the north.  We use this data internally for policy compliance, planning, complaint resolution, parking compliance, and equitable distrubution checks.
 
-![Start](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-downtown.jpg)
+![Start](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/raw-downtown.jpg)
 
 ### 2) Binning
 
 The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. 
 
-![Binning](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/bin-downtown)
+![Binning](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/bin-downtown.jpg)
 
 ### 3) Fuzzing More
 
 Next we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location, then we move both the start and end points further, in a random 800 meters radius in any direction.  In the Louisville data, this is about one third of all the trips.
 
-![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown)
+![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown.jpg)
 
 ### 4) End Result
 
