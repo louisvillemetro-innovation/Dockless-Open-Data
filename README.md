@@ -37,7 +37,7 @@ Next we run those binned locations through a k-anonymity generalization function
 
 ![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown.jpg)
 
-Note how the points here are more spread out than with the step 2 binning alone.
+Note how the points here are more spread out than with the step 2 binning alone. 
 
 ### 4) End Result
 
@@ -48,6 +48,10 @@ In the end we have a grid of points, and the person looking at the data cannot t
 Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analysis.
 
 -image here-
+
+### Interactive Map
+
+Take a look at this data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).
 
 ## Data Processing
 
@@ -217,10 +221,13 @@ DELIMITER ;
 
 ```
 
-*Note the .004 and .005 multipliers are to adjust the radius for the height and width difference at the latitude and longitude at the Louisville, KY latitude.  You may want to adjust these for your location.*
-
 Once this procedure is created, you can just run the procedure with this SQL.
 
+### Variables
+
+We used a **k value of 4** for Louisville.  You can increase this for your city if you'd like, which will increase the number of anonymized trips, which may be required to increase rider privacy based on your city's geographic size and trip counts.
+
+Note the **.004 and .005 multipliers** are to adjust the radius for the height and width difference at the latitude and longitude at the Louisville, KY latitude.  You may want to adjust these for your location.
 
 ```
 -- 4 update to be fuzzed values with random 3rd digit in a circle
