@@ -43,6 +43,8 @@ Note how the points here are more spread out than with the step 2 binning alone.
 
 In the end we have a grid of points, and the person looking at the data cannot trace a location back to its original location.  Also, there is no way to tell if a point has been both fuzzed and binned, or just binned.  
 
+![Final](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-downtown.jpg)
+
 Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analysis.
 
 -image here-
@@ -255,7 +257,9 @@ See a sample CSV file of this data in this repo: [DocklessOpenData-Sample-Aug201
 
 ## References
 
+These publications were used when developing these open data publishing methodology, specifically the 3 decimal place latitude and longitude truncation.  Additionally, we added time binning, outlier cleaning, and k-anonymity generalizations.
+
 - [Harvard's Civic Analytics Network](https://datasmart.ash.harvard.edu/news/article/civic-analytics-network-dockless-mobility-open-letter)
 - [NACTO's guidance](https://nacto.org/wp-content/uploads/2018/07/NACTO-Shared-Active-Transportation-Guidelines.pdf)
 
-*Note image colors have been check to be accessible to color blind individuals.  Please let us know if you experience any difficulties.*
+*Note image colors have been checked to be accessible to color blind individuals.  Please let us know if you experience any difficulties.*
