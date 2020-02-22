@@ -53,17 +53,17 @@ Effectively, this means each point could be up to 1,600+ meters away from its ac
 
 Take a look at this data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).
 
-## Data Processing
+# Data Processing
 
 These are the technical steps to processing from MDS to open data using MySQL.
 
 ### 1 Obtain secure access to an MDS feed
 
-Using your city's [Dockless Vehicle Policy](https://data.louisvilleky.gov/dataset/dockless-vehicles/resource/541f050d-b868-428e-9601-c48a04eba17c) data sharing and enforcement requirements, obtain authentication which each operator's MDS feed for your city.
+Using your city's [Dockless Vehicle Policy](https://data.louisvilleky.gov/dataset/dockless-vehicles/resource/541f050d-b868-428e-9601-c48a04eba17c) data sharing and enforcement requirements, obtain authentication with each operator's MDS feed for your city.
 
 ### 2 Ingest a subset of MDS data into a database table
 
-Ingestion method from MDS is left as an exercise for the reader.  Code for this should be added here at a later date.
+Ingestion method from MDS is left as an exercise for the reader.  Open source code, tools, or third party options may be added here at a later date.
 
 This is the table structure for the *DocklessOpenData* open data table:
 
