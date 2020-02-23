@@ -27,7 +27,7 @@ The raw start/end data comes to us through MDS as GPS points.  Note some have in
 
 ### 2) Binning
 
-The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. 
+The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. This effectively creates a spatial histogram of rectangular tesselation across the city -- instead of displaying this as points, you could show the data as a weighted rectangles.
 
 ![Binning](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/bin-downtown.jpg)
 
@@ -303,3 +303,5 @@ Since someone looking at the open data does not know which points have been move
 # Feedback
 
 We welcome any feedback you have with this data anonymization method, and your thoughts.  Please open an issue to discuss publicly, or contact us through our [open data website](https://data.louisvilleky.gov/) [contact form](https://louisvilleky.wufoo.com/forms/open-data-contact-form/).  And let us know if you are using this, some variation of this, or a differnt method for publishing your city's dockless data as open data or for open records requests.
+
+*Methodology developed, implemented, and documented by Michael Schnuerle, Louisville's [Chief Data Officer](https://louisvilleky.gov/government/civic-innovation-and-technology/data-officer).
