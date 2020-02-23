@@ -45,13 +45,13 @@ In the end we have a grid of points, and the person looking at the data cannot t
 
 ![Final](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-downtown.jpg)
 
-Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analysis. See the **"Anonymization Deep Dive"** section below for more details.
+Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analysis. See the "[Anonymization Deep Dive](https://github.com/louisvillemetro-innovation/dockless-open-data/blob/images/README.md#anonymization-deep-dive)" section below for more details.
 
 *Note image colors have been checked to be accessible to color blind individuals.  Please let us know if you experience any difficulties.*
 
 ## Interactive Map
 
-Take a look at this data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).
+Take a look at this 100,000 point data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).
 
 # Data Processing
 
@@ -302,4 +302,4 @@ Since someone looking at the open data does not know which points have been move
 
 # Feedback
 
-We welcome any feedback you have with this data anonymization method, and your thoughts.  Please open an issue to discuss publicly, or contact us through our [open data website](https://data.louisvilleky.gov/) [contact form](https://louisvilleky.wufoo.com/forms/open-data-contact-form/).
+We welcome any feedback you have with this data anonymization method, and your thoughts.  Please open an issue to discuss publicly, or contact us through our [open data website](https://data.louisvilleky.gov/) [contact form](https://louisvilleky.wufoo.com/forms/open-data-contact-form/).  And let us know if you are using this, some variation of this, or a differnt method for publishing your city's dockless data as open data or for open records requests.
