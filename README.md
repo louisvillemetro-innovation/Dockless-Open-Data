@@ -6,20 +6,20 @@ This guide will show how and why cities can convert [MDS](https://github.com/Ope
 
 We welcome feedback on this method of publishing.  We want to preserve rider privacy while being transparent with our methods and the data we collect.
 
-- Cities need to be transparent with the kinds of data we and private companies collect on residents, and publishing a subset of this data helps with this effort.
+- Cities need to be transparent with the kinds of data we and private companies collect on residents. Publishing a subset of this data helps with this effort.
 - Data sharing is required by open records laws, local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
 - The trip data in its raw form is considered PII since it anonymously tracks use of transportation devices in space and time, which is why we process the data before releasing.  Similar processing is done with crime reports and other open data.
 
 ## Example Geographic Data Outcomes
 
-Starting with the raw location data (red) we will use binning and k-anonymity to fuzz the locations, while still providing useful, granular data (green) to comply with local, state, and federal open records laws.
+Starting with the raw location data (red), we will use binning and k-anonymity to fuzz the locations, while still providing useful, granular data (green) to comply with local, state, and federal open records laws.
 
 ![Raw to Final](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-city.jpg)
 
 This image shows 100,000 dockless vehicle trip starting points (in red) from one provider selected randomly from raw Louisville data, and zoomed into downtown for detail.  After we bin the location to about 100 meters, we then use a k-anonymity generalization method to arrive at the final open data (point grid in green). 
 
-### 1) Staring Data - Raw GPS Points
+### 1) Starting Data - Raw GPS Points
 
 The raw start/end data comes to us through MDS as GPS points.  Note some have inherent GPS error already, as can be seen by points in the Ohio River to the north.  We use this data internally for policy compliance, planning, complaint resolution, parking compliance, and equitable distribution checks.
 
@@ -27,13 +27,13 @@ The raw start/end data comes to us through MDS as GPS points.  Note some have in
 
 ### 2) Binning
 
-The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. This effectively creates a spatial histogram of rectangular tessellation across the city -- instead of displaying this as points, you could show the data as a weighted rectangles.
+The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. This effectively creates a spatial histogram of rectangular tessellation across the city -- instead of displaying this as points, you could show the data as weighted rectangles.
 
 ![Binning](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/bin-downtown.jpg)
 
 ### 3) Fuzzing More
 
-Next we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location then we move both the start and end points further.  In the Louisville data, this is about one third of all the trips. We randomly move the locations in a 800 meters radius, which is up to 5 binning locations away in any direction.  
+Next, we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location then we move both the start and end points further.  In the Louisville data, this is about one third of all the trips. We randomly move the locations in a 800 meters radius, which is up to 5 binning locations away in any direction.  
 
 ![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown.jpg)
 
@@ -100,7 +100,7 @@ Note the use of *varchars*, because not all company MDS feeds have reliable/comp
 
 The last 5 columns are used just for anonymizing the data later, in step 4 below.
 
-**Note no trip line/polyline data is being stored, and no provider information**
+**Note no trip line/polyline data is being stored, and no provider information**.
 
 When inserting from MDS into *DocklessOpenData*, use the following SQL for formatting values:
 
@@ -182,7 +182,7 @@ having count(o.TripID) <= 4
 ;
 ```
 
-For the final step, we need to run a stored procedure.  You can create that procedure one time with this code:
+For the final step, we need to run a stored procedure.  You can create that procedure running this code one time:
 
 ```
 DELIMITER $$
@@ -227,20 +227,20 @@ DELIMITER ;
 
 Once this procedure is created, you can just run the procedure with this SQL.
 
+```
+-- 4 update to be fuzzed values by moving randomly within a radius
+call `FuzzOpenData`();
+```
+
 ### Variables
 
 We used a **k value of 4** for Louisville.  You can increase this for your city if you'd like, which will increase the number of anonymized trips, which may be required to increase rider privacy based on your city's geographic size and trip counts.
 
 Note the **.004 and .005 multipliers** are to adjust the radius for the height and width difference at the latitude and longitude at the Louisville, KY latitude.  You may want to adjust these for your location.
 
-```
--- 4 update to be fuzzed values with random 3rd digit in a circle
-call `FuzzOpenData`();
-```
-
 ## Final format of Open Data
 
-Export and post in CSV format **just the following fields** from the open data table. Note we are not including the last 5 fields that were used in the k-anonymity step 4 above.
+Export and post in CSV format **just the following fields** from the open data table. Note we are not including the last five fields that were used in the k-anonymity step 4 above.
 
 - **TripID** - a unique ID created by city
 - **StartDate** - in YYYY-MM-DD format
@@ -249,8 +249,8 @@ Export and post in CSV format **just the following fields** from the open data t
 - **EndTime** - rounded to the nearest 15 minutes in HH:MM format
 - **TripDuration** - duration of the trip minutes
 - **TripDistance** - distance of trip in miles - company provided data
-- **StartLatitude** - rounded to nearest 3 decimal places (about 
-- **StartLongitude** - rounded to nearest 3 decimal places
+- **StartLatitude** - rounded to nearest 3 decimal places (between 1-100 meters)
+- **StartLongitude** - rounded to nearest 3 decimal places (between 1-80 meters)
 - **EndLatitude** - rounded to nearest 3 decimal places
 - **EndLongitude** - rounded to nearest 3 decimal places
 - **DayOfWeek** - 1-7 based on date, 1 = Sunday through 7 = Saturday, useful for analysis
@@ -296,16 +296,16 @@ Here's an example showing the 2 points moving into a random area of each circle.
 
 ![3-single-trip-final-location.gif](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/3-single-trip-final-location.gif)
 
-In the final published data, this the location provided of these start and end points.
+In the final published data, this is the start and end point location provided.
 
 ### 4. Potential Original Locations
 
-Since someone looking at the open data does not know which points have been moved from which nearby area, the final points could have come from a radius of up to 800 meters in any direction.  This means each data point could have actually originated from anywhere within a 1,600 meter diameter circle, ie. one mile. 
+Since someone looking at the open data does not know which points have been moved from which nearby area, the final points could have come from a radius of up to 800 meters in any direction.  This means each data point could have actually originated from anywhere within a 1,600 meter diameter circle, i.e. one mile. 
 
 ![4-potential-original-locations](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/4-potential-original-locations.gif)
 
 # Feedback
 
-We welcome any feedback you have with this data anonymization method, and your thoughts.  Please open an issue to discuss publicly, or contact us through our [open data website](https://data.louisvilleky.gov/) [contact form](https://louisvilleky.wufoo.com/forms/open-data-contact-form/).  And let us know if you are using this, some variation of this, or a different method for publishing your city's dockless data as open data or for open records requests.
+We welcome any thoughts and feedback you have with this data anonymization method.  Please open an issue to discuss publicly, or contact us through our [open data website](https://data.louisvilleky.gov/) [contact form](https://louisvilleky.wufoo.com/forms/open-data-contact-form/).  And let us know if you are using this, some variation of this, or a different method for publishing your city's dockless data as open data or for open records requests.
 
-*Methodology developed, implemented, and documented by Michael Schnuerle, Louisville's [Chief Data Officer](https://louisvilleky.gov/government/civic-innovation-and-technology/data-officer).
+*Methodology developed, implemented, and documented by Michael Schnuerle, Louisville's [Chief Data Officer](https://louisvilleky.gov/government/civic-innovation-and-technology/data-officer).*
