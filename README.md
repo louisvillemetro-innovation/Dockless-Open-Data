@@ -33,7 +33,7 @@ The first thing we do is simply truncate the latitude and longitude to 3 decimal
 
 ### 3) Fuzzing More
 
-Next, we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location then we move both the start and end points further.  In the Louisville data, this is about one third of all the trips. We randomly move the locations in a 800 meters radius, which is up to 5 binning locations away in any direction.  
+Next, we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location then we move both the start and end points further.  In the Louisville data, this is about one third of all the trips. We randomly move the locations in an 800 meter radius, which is up to 5 binning locations away in any direction.  
 
 ![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown.jpg)
 
@@ -55,7 +55,7 @@ Take a look at this 100,000 point data sample and 4 different layers on an [inte
 
 # Data Processing
 
-These are the technical steps to processing from MDS to open data using MySQL.
+These are the technical steps to processing from MDS to open data using MySQL.  Note you can adapt this to MS SQL or PostGis with changes to some of the function names.
 
 ### 1 Obtain secure access to an MDS feed
 
