@@ -45,11 +45,11 @@ In the end we have a grid of points, and the person looking at the data cannot t
 
 ![Final](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-downtown.jpg)
 
-Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analysis.
+Effectively, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analysis. See the **"Anonymization Deep Dive"** section below for more details.
 
--image here-
+*Note image colors have been checked to be accessible to color blind individuals.  Please let us know if you experience any difficulties.*
 
-### Interactive Map
+## Interactive Map
 
 Take a look at this data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).
 
@@ -261,7 +261,6 @@ See a sample CSV file of this data in this repo: [DocklessOpenData-Sample-Aug201
 1. [Austin, TX](https://data.austintexas.gov/Transportation-and-Mobility/Shared-Micromobility-Vehicle-Trips/7d8e-dm7r) (aligned to census tracts, outliers cleaned)
 1. [Minneapolis, MN](http://opendata.minneapolismn.gov/datasets/motorized-foot-scooter-trips-2018) (aligned to line segments, outliers cleaned)
 
-
 ## References
 
 These publications were used when developing these open data publishing methodology, specifically the 3 decimal place latitude and longitude truncation.  Additionally, we added time binning, outlier cleaning, and k-anonymity generalizations.
@@ -269,4 +268,38 @@ These publications were used when developing these open data publishing methodol
 - [Harvard's Civic Analytics Network](https://datasmart.ash.harvard.edu/news/article/civic-analytics-network-dockless-mobility-open-letter)
 - [NACTO's guidance](https://nacto.org/wp-content/uploads/2018/07/NACTO-Shared-Active-Transportation-Guidelines.pdf)
 
-*Note image colors have been checked to be accessible to color blind individuals.  Please let us know if you experience any difficulties.*
+# Anonymization Deep Dive
+
+Because each origin and destination location point in the data has a chance (about 35% in Louisville) to be randomized using a k-anonymity generalization method, and you don't know which points have been moved using this method, this means each point could be up to 1,600+ meters away from its actual location, while the integrity of the data is still reasonably maintained for analysis. 
+
+Let's take a look at how this k-anonymity works with a specific example. 
+
+### 1. Single Trip - Original Location
+
+Here is an example of the original start and end points of a single trip taken across the city, after truncating to 3 latitude/longitude decimal places (which is anywhere from 1 to 100 meters away from the initial raw location data points).  
+
+![1-single-trip-original-location](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/1-single-trip-original-location.gif)
+
+### 2. Single Trip - Fuzzed Location
+
+The binned origin destination trip pair has 4 or less trips between them, so we need to use k-anonymity and move the points in a random direction within a radius.  The new points can fall anywhere within an 800 meter circle.
+
+![2-single-trip-fuzzed-location.gif](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/2-single-trip-fuzzed-location.gif)
+
+### 3. Single Trip - Final Location
+
+Here's an example showing the 2 points moving into a random area of each circle.  
+
+![3-single-trip-final-location.gif](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/3-single-trip-final-location.gif)
+
+In the final published data, this the location provided of these start and end points.
+
+### 4. Potential Original Locations
+
+Since someone looking at the open data does not know which points have been moved from which nearby area, the final points could have come from a radius of up to 800 meters in any direction.  This means each data point could have actually originated from anywhere within a 1,600 meter diameter circle, ie. one mile. 
+
+![4-potential-original-locations](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/4-potential-original-locations.gif)
+
+# Feedback
+
+We welcome any feedback you have with this data anonymization method, and your thoughts.  Please open an issue to discuss publicly, or contact us through our [open data website](https://data.louisvilleky.gov/) [contact form](https://louisvilleky.wufoo.com/forms/open-data-contact-form/).
