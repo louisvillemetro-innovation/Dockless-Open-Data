@@ -9,11 +9,11 @@ We welcome feedback on this method of publishing.  We want to preserve rider pri
 - Cities need to be transparent with the kinds of data we and private companies collect on residents, and publishing a subset of this data helps with this effort.
 - Data sharing is required by open records laws, local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
-- The trip data in its raw form is considered PII since it anonymously tracks use of transporation devices in space and time, which is why we process the data before releasing.  Similar processing is done with crime reports and other open data.
+- The trip data in its raw form is considered PII since it anonymously tracks use of transportation devices in space and time, which is why we process the data before releasing.  Similar processing is done with crime reports and other open data.
 
 ## Example Geographic Data Outcomes
 
-Starting with the raw location data (red) we will use binning and k-anonminity to fuzz the locations, while still providing useful, granular data (green) to comply with local, state, and federal open records laws.
+Starting with the raw location data (red) we will use binning and k-anonymity to fuzz the locations, while still providing useful, granular data (green) to comply with local, state, and federal open records laws.
 
 ![Raw to Final](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-city.jpg)
 
@@ -21,13 +21,13 @@ This image shows 100,000 dockless vehicle trip starting points (in red) from one
 
 ### 1) Staring Data - Raw GPS Points
 
-The raw start/end data comes to us through MDS as GPS points.  Note some have inherent GPS error already, as can be seen by points in the Ohio River to the north.  We use this data internally for policy compliance, planning, complaint resolution, parking compliance, and equitable distrubution checks.
+The raw start/end data comes to us through MDS as GPS points.  Note some have inherent GPS error already, as can be seen by points in the Ohio River to the north.  We use this data internally for policy compliance, planning, complaint resolution, parking compliance, and equitable distribution checks.
 
 ![Start](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/raw-downtown.jpg)
 
 ### 2) Binning
 
-The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. This effectively creates a spatial histogram of rectangular tesselation across the city -- instead of displaying this as points, you could show the data as a weighted rectangles.
+The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. This effectively creates a spatial histogram of rectangular tessellation across the city -- instead of displaying this as points, you could show the data as a weighted rectangles.
 
 ![Binning](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/bin-downtown.jpg)
 
@@ -106,9 +106,9 @@ When inserting from MDS into *DocklessOpenData*, use the following SQL for forma
 
 ```
 TripID = insert(insert(insert(insert(md5(sha2(source.OriginalTripID, '256')),9,1,'-'),14,1,'-'),19,1,'-'),24,1,'-') 
--- creates a new trip UUID from the orginal. This is a one-way function based on the source Trip UUID.  
+-- creates a new trip UUID from the original. This is a one-way function based on the source Trip UUID.  
 -- There may be a better way to do this, but we wanted to not just generate a new random UUID 
--- and instead wanted it to be reproducable based on source data.
+-- and instead wanted it to be reproducible based on source data.
 
 -- round start and end locations to 3 decimal places: about 2 city blocks, 
 -- depending on your location on earth and city size
@@ -306,6 +306,6 @@ Since someone looking at the open data does not know which points have been move
 
 # Feedback
 
-We welcome any feedback you have with this data anonymization method, and your thoughts.  Please open an issue to discuss publicly, or contact us through our [open data website](https://data.louisvilleky.gov/) [contact form](https://louisvilleky.wufoo.com/forms/open-data-contact-form/).  And let us know if you are using this, some variation of this, or a differnt method for publishing your city's dockless data as open data or for open records requests.
+We welcome any feedback you have with this data anonymization method, and your thoughts.  Please open an issue to discuss publicly, or contact us through our [open data website](https://data.louisvilleky.gov/) [contact form](https://louisvilleky.wufoo.com/forms/open-data-contact-form/).  And let us know if you are using this, some variation of this, or a different method for publishing your city's dockless data as open data or for open records requests.
 
 *Methodology developed, implemented, and documented by Michael Schnuerle, Louisville's [Chief Data Officer](https://louisvilleky.gov/government/civic-innovation-and-technology/data-officer).
