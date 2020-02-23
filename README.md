@@ -37,7 +37,7 @@ Next we run those binned locations through a k-anonymity generalization function
 
 ![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown.jpg)
 
-Note how the points here are more spread out than with the step 2 binning alone. 
+Note how the points here are more spread out than with the step 2 binning alone.  See this [online code sample](http://jsfiddle.net/7891b51f/) and article about [Disk Point Picking](http://mathworld.wolfram.com/DiskPointPicking.html) for more details. 
 
 ### 4) End Result
 
@@ -154,6 +154,10 @@ In our case, we look for O/D pairs of less than 5.  That is, where there are les
 In the final data there is no way to know which trips have been anonymized in this way, and which trips are only aggreggated to the block level without further anonymization.
 
 To do this with only SQL, we use the column called 'Fuzzed' which tracks what O/D pairs need to be fuzzed, and which ones have then been fuzzed with a stored procedure.  There are also 4 columns for lat/lon start/end coordinates, that are the original values before fuzzing. 
+
+**Technical Details**
+
+The formula in the procedure below moves the location to an evenly distributed location (not clustered around the center) within a defined circle.  See this [online code sample](http://jsfiddle.net/7891b51f/) and article about [Disk Point Picking](http://mathworld.wolfram.com/DiskPointPicking.html) formulas for more details. 
 
 
 ```
