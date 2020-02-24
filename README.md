@@ -8,6 +8,7 @@ We welcome feedback on this method of publishing.  We want to preserve rider pri
 
 - Cities need to be transparent with the kinds of data we and private companies collect on residents. Publishing a subset of this data helps with this goal.
 - The trip data in its raw form is considered sensitive and PII since it anonymously tracks use of transportation devices in space and time, which is why we process the data before releasing.  Similar processing is done before releasing as open data other information cities collect and use that also include PII, like crime report, permit, property, health, transit, fire, salary, HR, fee, tax, violation, ticket, citation, business registration, car crash, bikeshare, financial, 311, and 911 data.
+- The data cities receive does not include any other information about the rider like name, home/billing address, credit card, cell phone number, email address, birthdate, sex, drivers license info, height, weight, or trip history. Only the dockless vehicle companies have that information connected to trips.
 - Data sharing is required by open records laws, local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
 
