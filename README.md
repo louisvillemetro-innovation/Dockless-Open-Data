@@ -262,19 +262,6 @@ Export and post in CSV format **just the following fields** from the open data t
 
 See a sample CSV file of this data in this repo: [DocklessOpenData-Sample-Aug2019-Louisville.csv](https://github.com/louisvillemetro-innovation/dockless-open-data/blob/master/DocklessOpenData-Sample-Aug2019-Louisville.csv)
 
-## Cities with Dockless Trip Open Data
-
-1. [Louisville, KY](https://data.louisvilleky.gov/dataset/dockless-vehicles) (3 decimal places lat/lon, 15 min time increments, outliers cleaned, k-anonymity of <5 O/D pairs fuzzed more)
-1. [Kansas City, MO](https://data.kcmo.org/Transportation/Microtransit-Scooter-and-Ebike-Trips/dy5n-ewk5) Uses this method except for k-anonymity step (3 decimal places lat/lon, 15 min time increments, outliers cleaned)
-1. [Austin, TX](https://data.austintexas.gov/Transportation-and-Mobility/Shared-Micromobility-Vehicle-Trips/7d8e-dm7r) (aligned to census tracts, outliers cleaned)
-1. [Minneapolis, MN](http://opendata.minneapolismn.gov/datasets/motorized-foot-scooter-trips-2018) (aligned to line segments, outliers cleaned)
-
-## References
-
-These publications were used when developing these open data publishing methodology, specifically the 3 decimal place latitude and longitude truncation.  Additionally, we added time binning, outlier cleaning, and k-anonymity generalizations.
-
-- [Harvard's Civic Analytics Network](https://datasmart.ash.harvard.edu/news/article/civic-analytics-network-dockless-mobility-open-letter)
-- [NACTO's guidance](https://nacto.org/wp-content/uploads/2018/07/NACTO-Shared-Active-Transportation-Guidelines.pdf)
 
 # Anonymization Deep Dive
 
@@ -307,6 +294,22 @@ In the final published data, this is the start and end point location provided.
 Since someone looking at the open data does not know which points have been moved from which nearby area, the final points could have come from a radius of up to 800 meters in any direction.  This means each data point could have actually originated from anywhere within a 1,600 meter diameter circle, i.e. one mile. 
 
 ![4-potential-original-locations](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/4-potential-original-locations.gif)
+
+
+# Cities with Dockless Trip Open Data
+
+1. [Louisville, KY](https://data.louisvilleky.gov/dataset/dockless-vehicles) (3 decimal places lat/lon, 15 min time increments, outliers cleaned, k-anonymity of <5 O/D pairs fuzzed more)
+1. [Kansas City, MO](https://data.kcmo.org/Transportation/Microtransit-Scooter-and-Ebike-Trips/dy5n-ewk5) Uses this method except for k-anonymity step (3 decimal places lat/lon, 15 min time increments, outliers cleaned)
+1. [Austin, TX](https://data.austintexas.gov/Transportation-and-Mobility/Shared-Micromobility-Vehicle-Trips/7d8e-dm7r) (aligned to census tracts, outliers cleaned)
+1. [Minneapolis, MN](http://opendata.minneapolismn.gov/datasets/motorized-foot-scooter-trips-2018) (aligned to line segments, outliers cleaned)
+1. [Chicago, IL](https://data.cityofchicago.org/Transportation/E-Scooter-Trips-2019-Pilot/2kfw-zvte/data) (grouped by community area, 1 hour time increments)
+
+# References
+
+These publications were used when developing these open data publishing methodology, specifically the 3 decimal place latitude and longitude truncation.  Additionally, we added time binning, outlier cleaning, and k-anonymity generalizations.
+
+- [Harvard's Civic Analytics Network](https://datasmart.ash.harvard.edu/news/article/civic-analytics-network-dockless-mobility-open-letter)
+- [NACTO's guidance](https://nacto.org/wp-content/uploads/2018/07/NACTO-Shared-Active-Transportation-Guidelines.pdf)
 
 # Feedback
 
