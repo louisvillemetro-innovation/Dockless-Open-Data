@@ -19,19 +19,23 @@ Starting with the raw location data (red), we will use binning and k-anonymity t
 
 This image shows 100,000 dockless vehicle trip starting points (in red) from one provider selected randomly from raw Louisville data, and zoomed into downtown for detail.  After we bin the location to about 100 meters, we then use a k-anonymity generalization method to arrive at the final open data (point grid in green). 
 
-### 1) Starting Data - Raw GPS Points
+### 1) Time Binning
+
+The first thing we do to the raw data is bin the start and end location timestamps into 15 minute increments to help with data anonymization.  Note that times are in your city's local time.  We also are using ISO 8601 to be clear we are accounting for timezones and Daylight Saving Time. 
+
+### 2) Initial Locations - Raw GPS Points
 
 The raw start/end data comes to us through MDS as GPS points.  Note some have inherent GPS error already, as can be seen by points in the Ohio River to the north.  We use this data internally for policy compliance, planning, complaint resolution, parking compliance, and equitable distribution checks.
 
 ![Start](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/raw-downtown.jpg)
 
-### 2) Binning
+### 3) Geographic Binning
 
 The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. This effectively creates a spatial histogram of rectangular tessellation across the city -- instead of displaying this as points, you could show the data as weighted rectangles.
 
 ![Binning](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/bin-downtown.jpg)
 
-### 3) Fuzzing More
+### 4) Geographic Fuzzing 
 
 Next, we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location then we move both the start and end points further.  In the Louisville data, this is about one third of all the trips. We randomly move the locations in an 800 meter radius, which is up to 5 binning locations away in any direction.  
 
@@ -39,9 +43,9 @@ Next, we run those binned locations through a k-anonymity generalization functio
 
 Note how the points here are more spread out than with the step 2 binning alone.  See this [online code sample](http://jsfiddle.net/7891b51f/) and article about [Disk Point Picking](http://mathworld.wolfram.com/DiskPointPicking.html) for more details. 
 
-### 4) End Result
+### 5) End Result
 
-In the end we have a grid of points, and the person looking at the data cannot trace a location back to its original location.  Also, there is no way to tell if a point has been both fuzzed and binned, or just binned.  
+In the end we have a grid of points, and the person looking at the data cannot trace a location back to its original location.  Also, there is no way to tell if a point has been both fuzzed and binned, or only binned.  
 
 ![Final](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/k-bin-raw-downtown.jpg)
 
@@ -243,12 +247,12 @@ Note the **.004 and .005 multipliers** are to adjust the radius for the height a
 Export and post in CSV format **just the following fields** from the open data table. Note we are not including the last five fields that were used in the k-anonymity step 4 above.
 
 - **TripID** - a unique ID created by city
-- **StartDate** - in YYYY-MM-DD format
-- **StartTime** - rounded to the nearest 15 minutes in HH:MM format
-- **EndDate** - in YYYY-MM-DD format
-- **EndTime** - rounded to the nearest 15 minutes in HH:MM format
+- **StartDate** - in YYYY-MM-DD format (ISO 8601)
+- **StartTime** - rounded to the nearest 15 minutes in HH:MM format (ISO 8601)
+- **EndDate** - in YYYY-MM-DD format (ISO 8601)
+- **EndTime** - rounded to the nearest 15 minutes in HH:MM format (ISO 8601)
 - **TripDuration** - duration of the trip minutes
-- **TripDistance** - distance of trip in miles - company provided data
+- **TripDistance** - distance of trip in miles - company provides this data, it is not calculated from trip lines
 - **StartLatitude** - rounded to nearest 3 decimal places (between 1-100 meters)
 - **StartLongitude** - rounded to nearest 3 decimal places (between 1-80 meters)
 - **EndLatitude** - rounded to nearest 3 decimal places
