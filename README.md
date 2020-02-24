@@ -6,10 +6,10 @@ This guide will show how and why cities can convert [MDS](https://github.com/Ope
 
 We welcome feedback on this method of publishing.  We want to preserve rider privacy while being transparent with our methods and the data we collect.
 
-- Cities need to be transparent with the kinds of data we and private companies collect on residents. Publishing a subset of this data helps with this effort.
+- Cities need to be transparent with the kinds of data we and private companies collect on residents. Publishing a subset of this data helps with this goal.
+- The trip data in its raw form is considered sensitive and PII since it anonymously tracks use of transportation devices in space and time, which is why we process the data before releasing.  Similar processing is done before releasing as open data other information cities collect and use that also include PII, like crime report, permit, property, health, transit, fire, salary, HR, fee, tax, violation, ticket, citation, business registration, car crash, bikeshare, financial, 311, and 911 data.
 - Data sharing is required by open records laws, local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
-- The trip data in its raw form is considered PII since it anonymously tracks use of transportation devices in space and time, which is why we process the data before releasing.  Similar processing is done with crime reports and other open data.
 
 ## Example Geographic Data Outcomes
 
