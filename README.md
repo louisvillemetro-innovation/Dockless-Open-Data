@@ -21,7 +21,7 @@ This image shows 100,000 dockless vehicle trip starting points (in red) from one
 
 ### 1) Time Binning
 
-The first thing we do to the raw data is bin the start and end location timestamps into 15 minute increments to help with data anonymization.  Note that times are in your city's local time.  We also are using ISO 8601 to be clear we are accounting for timezones and Daylight Saving Time. 
+The first thing we do to the raw data is bin the start and end location timestamps into 15 minute increments. This temporal resolution reduction helps with data anonymization.  Note that we store times in our city's local time.  We also are using ISO 8601 to be clear we are accounting for timezones and Daylight Saving Time. 
 
 ### 2) Initial Locations - Raw GPS Points
 
