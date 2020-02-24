@@ -55,7 +55,7 @@ Effectively, this means each point could be up to 1,600+ meters away from its ac
 
 ## Interactive Map
 
-Take a look at this 100,000 point data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).
+Take a look at this 100,000 point data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).  Note this only includes the location samples needed to make the visuals in this document, not the final open data.
 
 # Data Processing
 
@@ -63,13 +63,13 @@ These are the technical steps to processing from MDS to open data using MySQL.  
 
 ### 1 Obtain secure access to an MDS feed
 
-Using your city's [Dockless Vehicle Policy](https://data.louisvilleky.gov/dataset/dockless-vehicles/resource/541f050d-b868-428e-9601-c48a04eba17c) data sharing and enforcement requirements, obtain authentication with each operator's MDS feed for your city.
+Using your city's [Dockless Vehicle Policy](https://data.louisvilleky.gov/dataset/dockless-vehicles/resource/541f050d-b868-428e-9601-c48a04eba17c) data sharing and enforcement requirements, obtain authentication with each operator's MDS feed for your city.  
 
 ### 2 Ingest a subset of MDS data into a database table
 
-Ingestion method from MDS is left as an exercise for the reader.  Open source code, tools, or third party options may be added here at a later date.
+Ingestion method from MDS is left as an exercise for the reader.  Securely store a subset (we do not store trip line data within the city network and only access that from the MDS source APIs when needed) of the raw MDS data and provide only authorized, audited, secure access to the location.  Open source code, tools, or third party options may be added here at a later date.
 
-This is the table structure for the *DocklessOpenData* open data table:
+This is the table structure for the *DocklessOpenData* open data table that you will be converting your data to:
 
 ```
 CREATE TABLE `DocklessOpenData` (
@@ -110,12 +110,11 @@ When inserting from MDS into *DocklessOpenData*, use the following SQL for forma
 
 ```
 TripID = insert(insert(insert(insert(md5(sha2(source.OriginalTripID, '256')),9,1,'-'),14,1,'-'),19,1,'-'),24,1,'-') 
--- creates a new trip UUID from the original. This is a one-way function based on the source Trip UUID.  
--- There may be a better way to do this, but we wanted to not just generate a new random UUID 
+-- creates a new uniform trip UUID from the original. This is a one-way function based on the source Trip UUID.  
+-- There may be a better way to do this, but we wanted to not generate a new UUID each time
 -- and instead wanted it to be reproducible based on source data.
 
--- round start and end locations to 3 decimal places: about 2 city blocks, 
--- depending on your location on earth and city size
+-- round start and end locations to 3 decimal places
 StartLatitude = ROUND(source.OriginalStartLatitude, 3)
 StartLongitude = ROUND(source.OriginalStartLongitude, 3)
 EndLatitude = ROUND(source.OriginalEndLatitude, 3)
@@ -242,7 +241,7 @@ We used a **k value of 4** for Louisville.  You can increase this for your city 
 
 Note the **.004 and .005 multipliers** are to adjust the radius for the height and width difference at the latitude and longitude at the Louisville, KY latitude.  You may want to adjust these for your location.
 
-## Final format of Open Data
+# Final format of Open Data
 
 Export and post in CSV format **just the following fields** from the open data table. Note we are not including the last five fields that were used in the k-anonymity step 4 above.
 
