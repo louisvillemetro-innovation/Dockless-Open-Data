@@ -1,6 +1,34 @@
+
+
 # Dockless Open Data
 
 This guide will show how and why cities can convert [MDS](https://github.com/OpenMobilityFoundation/mobility-data-specification) trip data to anonymized open data, while respecting rider privacy.  This method is being used in [Louisville's public dockless open trip data](https://data.louisvilleky.gov/dataset/dockless-vehicles) and uses MySQL queries only.
+
+## Table of Contents
+
+- [Points to Consider](#points-to-consider)
+- [Example Geographic Data Outcomes](#example-geographic-data-outcomes)
+    + [1. Time Binning](#1-time-binning)
+    + [2. Initial Locations - Raw GPS Points](#2-initial-locations---raw-gps-points)
+    + [3. Geographic Binning](#3-geographic-binning)
+    + [4. Geographic Fuzzing](#4-geographic-fuzzing)
+    + [5. End Result](#5-end-result)
+  * [Interactive Map](#interactive-map)
+- [Data Processing](#data-processing)
+    + [1. Obtain secure access to an MDS feed](#1-obtain-secure-access-to-an-mds-feed)
+    + [2. Ingest a subset of MDS data into a database table](#2-ingest-a-subset-of-mds-data-into-a-database-table)
+    + [3. Run scripts to convert and clean open data](#3-run-scripts-to-convert-and-clean-open-data)
+    + [4. Anonymize start and end points with few trips](#4-anonymize-start-and-end-points-with-few-trips)
+    + [Variables](#variables)
+- [Final format of Open Data](#final-format-of-open-data)
+- [Anonymization Deep Dive](#anonymization-deep-dive)
+    + [1. Single Trip - Original Location](#1-single-trip---original-location)
+    + [2. Single Trip - Fuzzed Location](#2-single-trip---fuzzed-location)
+    + [3. Single Trip - Final Location](#3-single-trip---final-location)
+    + [4. Potential Original Locations](#4-potential-original-locations)
+- [Cities with Dockless Trip Open Data](#cities-with-dockless-trip-open-data)
+- [References](#references)
+- [Feedback](#feedback)
 
 ## Points to Consider
 
@@ -12,7 +40,7 @@ We welcome feedback on this method of publishing.  We want to preserve rider pri
 - Data sharing is required by open records laws, local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
 
-## Example Geographic Data Outcomes
+# Example Geographic Data Outcomes
 
 Starting with the raw location data (red), we will use binning and k-anonymity to fuzz the locations, while still providing useful, granular data (green) to comply with local, state, and federal open records laws.
 
@@ -20,23 +48,23 @@ Starting with the raw location data (red), we will use binning and k-anonymity t
 
 This image shows 100,000 dockless vehicle trip starting points (in red) from one provider selected randomly from raw Louisville data, and zoomed into downtown for detail.  After we bin the location to about 100 meters, we then use a k-anonymity generalization method to arrive at the final open data (point grid in green). 
 
-### 1) Time Binning
+### 1. Time Binning
 
 The first thing we do to the raw data is bin the start and end location timestamps into 15 minute increments. This temporal resolution reduction helps with data anonymization.  Note that we store times in our city's local time.  We also are using ISO 8601 to be clear we are accounting for timezones and Daylight Saving Time. 
 
-### 2) Initial Locations - Raw GPS Points
+### 2. Initial Locations - Raw GPS Points
 
 The raw start/end data comes to us through MDS as GPS points.  Note some have inherent GPS error already, as can be seen by points in the Ohio River to the north.  We use this data internally for policy compliance, planning, complaint resolution, parking compliance, and equitable distribution checks.
 
 ![Start](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/raw-downtown.jpg)
 
-### 3) Geographic Binning
+### 3. Geographic Binning
 
 The first thing we do is simply truncate the latitude and longitude to 3 decimal places, which clearly bins the starting and ending locations into a grid that is about 100 meters tall and 80 meters wide at this location (Louisville) on the planet. This effectively creates a spatial histogram of rectangular tessellation across the city -- instead of displaying this as points, you could show the data as weighted rectangles.
 
 ![Binning](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/bin-downtown.jpg)
 
-### 4) Geographic Fuzzing 
+### 4. Geographic Fuzzing 
 
 Next, we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location then we move both the start and end points further.  In the Louisville data, this is about one third of all the trips. We randomly move the locations in an 800 meter radius, which is up to 5 binning locations away in any direction.  
 
@@ -44,7 +72,7 @@ Next, we run those binned locations through a k-anonymity generalization functio
 
 Note how the points here are more spread out than with the step 2 binning alone.  See this [online code sample](http://jsfiddle.net/7891b51f/) and article about [Disk Point Picking](http://mathworld.wolfram.com/DiskPointPicking.html) for more details. 
 
-### 5) End Result
+### 5. End Result
 
 In the end we have a grid of points, and the person looking at the data cannot trace a location back to its original location.  Also, there is no way to tell if a point has been both fuzzed and binned, or only binned.  
 
@@ -62,11 +90,11 @@ Take a look at this 100,000 point data sample and 4 different layers on an [inte
 
 These are the technical steps to processing from MDS to open data using MySQL.  Note you can adapt this to MS SQL or PostGis with changes to some of the function names.
 
-### 1 Obtain secure access to an MDS feed
+### 1. Obtain secure access to an MDS feed
 
 Using your city's [Dockless Vehicle Policy](https://data.louisvilleky.gov/dataset/dockless-vehicles/resource/541f050d-b868-428e-9601-c48a04eba17c) data sharing and enforcement requirements, obtain authentication with each operator's MDS feed for your city.  
 
-### 2 Ingest a subset of MDS data into a database table
+### 2. Ingest a subset of MDS data into a database table
 
 Ingestion method from MDS is left as an exercise for the reader.  Securely store a subset (we do not store trip line data within the city network and only access that from the MDS source APIs when needed) of the raw MDS data and provide only authorized, audited, secure access to the location.  Open source code, tools, or third party options may be added here at a later date.
 
@@ -135,7 +163,7 @@ TripDuration = Round( ( UNIX_TIMESTAMP(source.OriginalEndDateTime) - UNIX_TIMEST
 -- rounded to nearest minute
 ```
 
-### 3 Run scripts to convert and clean open data
+### 3. Run scripts to convert and clean open data
 
 This removes distance outliers and populates day of week and hour of day fields.
 
@@ -149,7 +177,7 @@ Set
 	o.TripDistance = 100 where o.TripDistance > 100;
 ```
 
-### 4 Anonymize start and end points with few trips
+### 4. Anonymize start and end points with few trips
 
 If there are not many trips between a starting location even after binning to 3 decimal places in step 2, then we anonymize further to protect privacy of individual riders.  This common practice is called "k-anonymity".
 
