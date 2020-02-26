@@ -37,7 +37,7 @@ We welcome feedback on this method of publishing.  We want to preserve rider pri
 - Cities need to be transparent with the kinds of data we and private companies collect on residents. Publishing a subset of this data helps with this goal.
 - The trip data in its raw form is considered sensitive and PII since it anonymously tracks use of transportation devices in space and time, which is why we process the data before releasing.  Similar processing is done before releasing as open data other information cities collect and use that also include PII, like crime report, permit, property, health, transit, fire, salary, HR, fee, tax, violation, ticket, citation, business registration, car crash, bikeshare, financial, 311, and 911 data.
 - The data cities receive does not include any other information about the rider like name, home/billing address, credit card, cell phone number, email address, birthdate, sex, drivers license info, height, weight, or trip history. Only the dockless vehicle companies have that information connected to trips.
-- Data sharing is required by open records laws, local policy, state law, and federal law, with exceptions for personally identifiable information, trade secrets of companies, and sensitive data.
+- Sharing a subset of this data is required by open records laws, local policy, state law, and federal law, so defining the details of what to share is important.  There are typically exceptions for personally identifiable information, trade secrets of companies, and sensitive data which this method should account for.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
 
 # Example Geographic Data Outcomes
@@ -50,7 +50,7 @@ This image shows 100,000 dockless vehicle trip starting points (in red) from one
 
 ### 1. Time Binning
 
-The first thing we do to the raw data is bin the start and end location timestamps into 15 minute increments. This temporal resolution reduction helps with data anonymization.  Note that we store times in our city's local time.  We also are using ISO 8601 to be clear we are accounting for timezones and Daylight Saving Time. 
+The first thing we do to the raw data is bin the start and end location timestamps into 15 minute increments. This temporal resolution reduction helps with data anonymization.  Note that we store times in our city's local time.  We also are using ISO 8601 to be clear you should be accounting for timezones and Daylight Saving Time in your local area. 
 
 ### 2. Initial Locations - Raw GPS Points
 
@@ -84,7 +84,9 @@ Effectively, this means each point could be up to 1,600+ meters away from its ac
 
 ## Interactive Map
 
-Take a look at this 100,000 point data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).  Note this only includes the location samples needed to make the visuals in this document, not the final open data.
+Take a look at this 100,000 point data sample and 4 different layers on an [interactive map](https://cdolabs.carto.com/u/cdolabs-admin/viz/fd80e015-4319-4937-b350-545e4095f40c).  
+
+Note this only includes the location samples needed to make the example visuals in this document, not the final open data.  The raw data layer is not downloadable (only visible on the map) and only includes start location, not the end location, or any time/date information, or any trip information (trip line, end point, distance, duration).
 
 # Data Processing
 
