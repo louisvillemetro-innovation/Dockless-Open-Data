@@ -2,7 +2,7 @@
 
 # Dockless Open Data
 
-This guide will show how and why cities can convert [MDS](https://github.com/OpenMobilityFoundation/mobility-data-specification) trip data to anonymized open data, while respecting rider privacy.  This method is being used in [Louisville's public dockless open trip data](https://data.louisvilleky.gov/dataset/dockless-vehicles) and uses MySQL queries only.
+This guide will show how and why cities can convert [MDS](https://github.com/OpenMobilityFoundation/mobility-data-specification) trip data to anonymized open data, while respecting rider privacy.  This method is being used in [Louisville's public dockless open trip data](https://data.louisvilleky.gov/dataset/dockless-vehicles) and uses MySQL queries only.  It bins data in both space and time.
 
 ## Table of Contents
 
@@ -35,10 +35,13 @@ This guide will show how and why cities can convert [MDS](https://github.com/Ope
 We welcome feedback on this method of publishing.  We want to preserve rider privacy while being transparent with our methods and the data we collect.
 
 - Cities need to be transparent with the kinds of data we and private companies collect on residents. Publishing a subset of this data helps with this goal.
-- The trip data in its raw form is considered sensitive and PII since it anonymously tracks use of transportation devices in space and time, which is why we process the data before releasing.  Similar processing is done before releasing as open data other information cities collect and use that also include PII, like crime report, permit, property, health, transit, fire, salary, HR, fee, tax, violation, ticket, citation, business registration, car crash, bikeshare, financial, 311, and 911 data.
-- The data cities receive does not include any other information about the rider like name, home/billing address, credit card, cell phone number, email address, birthdate, sex, drivers license info, height, weight, or trip history. Only the dockless vehicle companies have that information connected to trips.
-- Sharing a subset of this data is required by open records laws, local policy, state law, and federal law, so defining the details of what to share is important.  There are typically exceptions for personally identifiable information, trade secrets of companies, and sensitive data which this method should account for.
+- The trip data in its raw form is considered highly sensitive. The data potentially contains PII if merged with other data sources/information and since it anonymously tracks use of transportation devices in space and time. This is why we process the data before releasing.  Cities collect information that can include PII as required to provide services to residents, and similar processing is done before releasing this publicly. Examples include crime report, permit, property, health, transit, fire, salary, HR, fee, tax, violation, ticket, citation, business registration, car crash, bikeshare, financial, 311, and 911 data.
+- The data cities receive does not include traditional PII or any other information about the rider like name, home/billing address, credit card number, cell phone number, email address, birthdate, sex, drivers license info, height, weight, or trip history. Only the dockless vehicle companies have that information and can connect it to each trips.
+- Sharing a subset of this data is required in many jurisdictions by open records laws, local policy, state law, and federal law, so defining the details of what to share is important.  There are typically exceptions for personally identifiable information, trade secrets of companies, and sensitive data which this method should account for.
+- When publishing open data in this form, talk to your mobility service provider and third party aggregators to ensure the resulting data is accurate.
 - Cities need to balance transparency requirements and open records laws with privacy best practices.
+
+Note this is not legal advice, but considerations from Louisville's perspective.
 
 # Example Geographic Data Outcomes
 
@@ -90,7 +93,7 @@ Note this only includes the location samples needed to make the example visuals 
 
 # Data Processing
 
-These are the technical steps to processing from MDS to open data using MySQL.  Note you can adapt this to MS SQL or PostGis with changes to some of the function names.
+This methodology will bin origin and destination data in both space and time.  These are the technical steps to processing from MDS to open data using MySQL.  Note you can adapt this to MS SQL or PostGis with changes to some of the function names.
 
 ### 1. Obtain secure access to an MDS feed
 
@@ -259,7 +262,7 @@ DELIMITER ;
 
 ```
 
-Once this procedure is created, you can just run the procedure with this SQL.
+Once this procedure is created, you can just run the procedure with this SQL upon each data update.
 
 ```
 -- 4 update to be fuzzed values by moving randomly within a radius
