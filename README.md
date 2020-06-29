@@ -69,7 +69,7 @@ The first thing we do is simply truncate the latitude and longitude to 3 decimal
 
 ### 4. Geographic Fuzzing 
 
-Next, we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location then we move both the start and end points further.  In the Louisville data, this is about one third of all the trips. We randomly move the locations in an 800 meter radius, which is up to 5 binning locations away in any direction.  
+Next, we run those binned locations through a k-anonymity generalization function.  If there are 4 or less origin/destination pairs to/from the same location then we move both the start and end points further.  In the Louisville data, this is about one third of all the trips. We randomly move the locations in a 400 meter radius, which is up to 5 binning locations away in any direction.  
 
 ![Fuzzing](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/final-downtown.jpg)
 
