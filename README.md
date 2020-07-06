@@ -324,10 +324,7 @@ In the final published data, this is the start and end point location provided.
 
 ### 4. Potential Original Locations
 
-Since someone looking at the open data does not know which points have been moved from which nearby area, the final points could have come from a radius of up to 800 meters in any direction.  This means each data point could have actually originated from anywhere within a 1,600 meter diameter circle, i.e. one mile. 
-
-![4-potential-original-locations](https://raw.githubusercontent.com/louisvillemetro-innovation/dockless-open-data/images/images/4-potential-original-locations.gif)
-
+Since someone looking at the open data does not know which points have been moved from which nearby area, the final points could have come from a radius of up to 400 meters in any direction.  This means each data point could have actually originated from anywhere within a 800 meter diameter circle, i.e. half a mile.
 
 # Cities with Dockless Trip Open Data
 
@@ -336,6 +333,7 @@ Since someone looking at the open data does not know which points have been move
 1. [Austin, TX](https://data.austintexas.gov/Transportation-and-Mobility/Shared-Micromobility-Vehicle-Trips/7d8e-dm7r) (aligned to census tracts, outliers cleaned)
 1. [Minneapolis, MN](http://opendata.minneapolismn.gov/datasets/motorized-foot-scooter-trips-2018) (aligned to line segments, outliers cleaned)
 1. [Chicago, IL](https://data.cityofchicago.org/Transportation/E-Scooter-Trips-2019-Pilot/2kfw-zvte/data) (grouped by community area, 1 hour time increments)
+1. [Calgary, Alberta, Canada](https://data.calgary.ca/browse?q=shared%20mobility%20pilot&sortBy=relevance) (1 hour time and hexagonal spacial binning)
 
 # References
 
